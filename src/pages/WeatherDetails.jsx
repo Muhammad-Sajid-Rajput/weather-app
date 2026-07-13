@@ -11,6 +11,7 @@ import { useWeather } from '@/features/weather/hooks/useWeather'
 import { deslugifyCity, isValidCityName, slugifyCity } from '@/shared/utils/city'
 import { ROUTES } from '@/shared/constants/routes'
 import { getBackgroundImage } from '@/shared/utils/weather'
+import { useLiveCityTime } from '@/features/weather/hooks/useLiveCityTime'
 
 const WeatherDetailsPage = () => {
   const { city } = useParams()
@@ -32,17 +33,29 @@ const WeatherDetailsPage = () => {
     }
   }, [weather, city, navigate])
 
+  const tzId = weather?.location?.tz_id
+  const timeData = useLiveCityTime(tzId)
+
   const now = new Date()
-  const timeStr = now.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  })
-  const dateStr = now.toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  })
+  let displayTime = timeData.time12
+  let displayDate = timeData.shortDate
+
+  if (!displayTime || !displayDate) {
+    displayTime = now.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
+    displayDate = now.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  const timeParts = displayTime.split(' ')
+  const timeOnly = timeParts[0]
+  const period = timeParts[1]
 
   let bgHour = now.getHours()
   let bgCondition = ''
@@ -66,10 +79,17 @@ const WeatherDetailsPage = () => {
     >
       <div className="page-container flex flex-col gap-3 sm:gap-4 pb-4">
         <div className="text-center py-1 sm:py-2">
-          <p className="font-display text-3xl sm:text-5xl lg:text-6xl text-on-surface tracking-tight leading-none">
-            {timeStr}
-          </p>
-          <p className="font-mono text-label-mono text-on-surface-variant mt-1">{dateStr}</p>
+          <div className="flex items-baseline justify-center gap-1.5">
+            <span className="font-display text-3xl sm:text-5xl lg:text-6xl text-on-surface tracking-tight leading-none">
+              {timeOnly}
+            </span>
+            {period && (
+              <span className="font-mono text-sm sm:text-base lg:text-lg font-medium text-primary uppercase">
+                {period}
+              </span>
+            )}
+          </div>
+          <p className="font-mono text-label-mono text-on-surface-variant mt-1">{displayDate}</p>
         </div>
 
         {invalidCity && (

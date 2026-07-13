@@ -18,6 +18,9 @@ describe('useLiveCityTime', () => {
       time: null,
       date: null,
       dayPeriod: null,
+      time24: null,
+      time12: null,
+      shortDate: null,
     })
   })
 

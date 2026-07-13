@@ -1,7 +1,6 @@
 import Icon from '@/shared/components/Icon'
 import FavoriteButton from '@/features/favorites/components/FavoriteButton'
 import CurrentWeatherIcon from './CurrentWeatherIcon'
-import LiveClock from './LiveClock'
 
 const CurrentWeather = ({ weather, onRefresh, refreshing }) => {
   if (!weather?.location || !weather?.current) {
@@ -20,9 +19,6 @@ const CurrentWeather = ({ weather, onRefresh, refreshing }) => {
           <p className="font-mono text-label-mono text-on-surface-variant mt-0.5 truncate">
             {location.country}
           </p>
-          <div className="mt-2.5">
-            <LiveClock tzId={location.tz_id} />
-          </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 self-start">
           <FavoriteButton city={fullLocationLabel} />
