@@ -1,5 +1,9 @@
 # ClimateX
 
+<p align="center">
+  <img src="public/climatex_banner.png" alt="ClimateX Banner" width="100%" />
+</p>
+
 Real-Time Forecasts. Reliable Insights.
 
 ClimateX is a production-ready full-stack weather dashboard built with React, Vite, Tailwind CSS, and Express.
